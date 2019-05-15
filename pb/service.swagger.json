@@ -1,0 +1,519 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "service.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/user/api/v1/account/activate": {
+      "post": {
+        "operationId": "ActivateAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceActivateAccountResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceActivateAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/account/create": {
+      "post": {
+        "operationId": "CreateAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceCreateAccountResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceCreateAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/account/delete": {
+      "get": {
+        "operationId": "DeleteAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceDeleteAccountResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "session_token",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/account/get": {
+      "get": {
+        "operationId": "GetAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceGetAccountResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "session_token",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/account/lock": {
+      "post": {
+        "operationId": "LockAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceLockAccountResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceLockAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/account/resend": {
+      "post": {
+        "operationId": "ResendActivationMail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceResendActivationMailResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceResendActivationMailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/account/unlock": {
+      "post": {
+        "operationId": "UnlockAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceUnlockAccountResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceUnlockAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/account/unlock/request": {
+      "post": {
+        "operationId": "RequestUnlockAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceRequestUnlockAccountResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceRequestUnlockAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/account/update": {
+      "post": {
+        "operationId": "UpdateAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceUpdateAccountResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceUpdateAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/login": {
+      "post": {
+        "operationId": "Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceLoginResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/logout": {
+      "get": {
+        "operationId": "Logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceLogoutResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "session_token",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/password/reset": {
+      "post": {
+        "operationId": "ResetPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceResetPasswordResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceResetPasswordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "account_serviceActivateAccountRequest": {
+      "type": "object",
+      "properties": {
+        "activation_token": {
+          "type": "string",
+          "format": "byte"
+        },
+        "activation_date": {
+          "type": "string"
+        }
+      }
+    },
+    "account_serviceActivateAccountResponse": {
+      "type": "object",
+      "properties": {
+        "session_token": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "account_serviceCreateAccountRequest": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/account_serviceUser"
+        },
+        "creation_date": {
+          "type": "string"
+        }
+      }
+    },
+    "account_serviceCreateAccountResponse": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "account_serviceDeleteAccountResponse": {
+      "type": "object"
+    },
+    "account_serviceGetAccountResponse": {
+      "type": "object"
+    },
+    "account_serviceLockAccountRequest": {
+      "type": "object",
+      "properties": {
+        "session_token": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "account_serviceLockAccountResponse": {
+      "type": "object"
+    },
+    "account_serviceLoginRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "account_serviceLoginResponse": {
+      "type": "object",
+      "properties": {
+        "session_token": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "account_serviceLogoutResponse": {
+      "type": "object"
+    },
+    "account_serviceRequestUnlockAccountRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "account_serviceRequestUnlockAccountResponse": {
+      "type": "object"
+    },
+    "account_serviceResendActivationMailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "account_serviceResendActivationMailResponse": {
+      "type": "object"
+    },
+    "account_serviceResetPasswordRequest": {
+      "type": "object",
+      "properties": {
+        "session_token": {
+          "type": "string",
+          "format": "byte"
+        },
+        "email": {
+          "type": "string"
+        },
+        "old_password": {
+          "type": "string"
+        },
+        "new_password": {
+          "type": "string"
+        }
+      }
+    },
+    "account_serviceResetPasswordResponse": {
+      "type": "object"
+    },
+    "account_serviceUnlockAccountRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "account_serviceUnlockAccountResponse": {
+      "type": "object"
+    },
+    "account_serviceUpdateAccountRequest": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/account_serviceUser"
+        },
+        "creation_date": {
+          "type": "string"
+        }
+      }
+    },
+    "account_serviceUpdateAccountResponse": {
+      "type": "object"
+    },
+    "account_serviceUser": {
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "birthday": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "photo": {
+          "type": "string",
+          "format": "byte"
+        },
+        "available_mb": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

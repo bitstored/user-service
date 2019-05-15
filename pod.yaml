@@ -1,0 +1,41 @@
+apiVersion: "extensions/v1beta1"
+kind: "Deployment"
+metadata:
+  name: "user-service"
+  namespace: "default"
+  labels:
+    app: "user-service"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "user-service"
+  template:
+    metadata:
+      labels:
+        app: "user-service"
+    spec:
+      containers:
+        - name: "user-service-latest"
+          image: "gcr.io/licenta-diana/user-service"
+          imagePullPolicy: "Always"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "user-service-hpa"
+  namespace: "default"
+  labels:
+    app: "user-service"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "user-service"
+    apiVersion: "apps/v1beta1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: "Resource"
+      resource:
+        name: "cpu"
+        targetAverageUtilization: 80

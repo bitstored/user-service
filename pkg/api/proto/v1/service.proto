@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+package account_service;
+option go_package="pb";
+
+import "google/api/annotations.proto";
+
+service Account {
+    rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/account/create"
+            body: "*"
+        };
+    }
+    rpc ResendActivationMail(ResendActivationMailRequest) returns (ResendActivationMailResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/account/resend"
+            body: "*"
+        };
+    }
+    rpc ActivateAccount(ActivateAccountRequest) returns (ActivateAccountResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/account/activate"
+            body: "*"
+        };
+    }
+    rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/account/update"
+            body: "*"
+        };
+    }
+    rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
+        option (google.api.http) = {
+            get: "/user/api/v1/account/delete"
+        };
+    }
+    rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {
+        option (google.api.http) = {
+            get: "/user/api/v1/account/get"
+        };
+    }
+    rpc Login(LoginRequest) returns (LoginResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/login"
+            body: "*"
+        };
+    }
+     rpc Logout(LogoutRequest) returns (LogoutResponse) {
+        option (google.api.http) = {
+            get: "/user/api/v1/logout"
+        };
+    }
+    rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/password/reset"
+            body: "*"
+        };
+    }
+    rpc LockAccount(LockAccountRequest) returns (LockAccountResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/account/lock"
+            body: "*"
+        };
+    }
+    rpc RequestUnlockAccount(RequestUnlockAccountRequest) returns (RequestUnlockAccountResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/account/unlock/request"
+            body: "*"
+        };
+    }
+    rpc UnlockAccount(UnlockAccountRequest) returns (UnlockAccountResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/account/unlock"
+            body: "*"
+        };
+    }
+    rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+        option (google.api.http) = {
+            post: "/user/api/v1/account/list"
+            body: "*"
+        };
+    }
+}
+
+message User {
+    string first_name = 1;
+    string last_name = 2;
+    string birthday = 3;
+    string email = 4;
+    string username = 5;
+    string password = 6;
+    string phone_number = 7;
+    bytes photo = 8;
+    uint32 available_mb = 9;
+}
+
+message CreateAccountRequest {
+    User user = 1;
+    string creation_date = 2;
+}
+message CreateAccountResponse {
+    string user_id = 1;
+}
+message ActivateAccountRequest {
+    bytes activation_token = 1;
+    string activation_date = 2;
+}
+message ActivateAccountResponse {
+    bytes session_token = 1;
+}
+message ResendActivationMailRequest {
+    string email = 1;
+}
+message ResendActivationMailResponse {
+}
+message UpdateAccountRequest {
+    User user = 1;
+    string creation_date = 2;
+}
+message UpdateAccountResponse {
+}
+message DeleteAccountRequest{
+    bytes session_token = 1;
+}
+message DeleteAccountResponse{  
+}
+message GetAccountRequest{
+    bytes session_token = 1;
+}
+message GetAccountResponse{ 
+}
+message LoginRequest{
+    string username = 1;
+    string password = 2;
+}
+message LoginResponse{
+    bytes session_token = 1;    
+}
+message LogoutRequest{
+    bytes session_token = 1;
+}
+message LogoutResponse{
+}
+message ResetPasswordRequest{
+    bytes session_token = 1;
+    string email = 2;
+    string old_password = 3;
+    string new_password = 4;
+}
+message ResetPasswordResponse{
+}
+message LockAccountRequest{
+    bytes session_token = 1;
+}
+message LockAccountResponse{
+}
+message UnlockAccountRequest{
+    string email = 1;
+    string token = 2;
+}
+message UnlockAccountResponse{ 
+}
+message RequestUnlockAccountRequest{
+    string email = 1;
+    string password = 2;
+}
+message RequestUnlockAccountResponse{
+}
+message ListUsersRequest {
+}
+message ListUsersResponse {
+    repeated User users = 1;
+}
