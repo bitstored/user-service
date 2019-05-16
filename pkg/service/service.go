@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/bitstored/auth-service/pkg/validator"
+
 	"github.com/bitstored/user-service/pkg/repository"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -39,7 +40,13 @@ func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay t
 	if !ok {
 		return fmt.Errorf("Email is invalid")
 	}
+	// Encrypt pass
+	salt := newSalt()
+	hash, err := encryptPassword(pass, salt)
 
+	if err != nil {
+		return err
+	}
 	user := repository.User{
 		ID:          primitive.NewObjectID(),
 		FistName:    fName,
@@ -47,7 +54,8 @@ func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay t
 		Birthday:    bDay,
 		Email:       email,
 		Username:    uname,
-		Password:    pass,
+		Password:    hash,
+		Salt:        salt,
 		PhoneNumber: pNumber,
 		Photo:       photo,
 	}
@@ -80,7 +88,25 @@ func (s *Service) DeleteAccount(ctx context.Context) (error, error) {
 func (s *Service) GetAccount(ctx context.Context) (error, error) {
 	return nil, nil
 }
-func (s *Service) Login(ctx context.Context) (error, error) {
+func (s *Service) Login(ctx context.Context, username, password string) ([]byte, error) {
+	if username == "" {
+		return nil, fmt.Errorf("empty username")
+	}
+
+	user := s.Repo.Login(ctx, USER_COLLECTION_NAME, username, password)
+	// Encrypt pass
+	salt := user.Salt
+
+	hash, err := encryptPassword(password, salt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if hash != user.Password {
+		return nil, fmt.Errorf("invalid password")
+	}
+
 	return nil, nil
 }
 func (s *Service) Logout(ctx context.Context) (error, error) {

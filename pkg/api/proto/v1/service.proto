@@ -126,9 +126,10 @@ message DeleteAccountRequest{
 message DeleteAccountResponse{  
 }
 message GetAccountRequest{
-    bytes session_token = 1;
+    string id = 1;
 }
 message GetAccountResponse{ 
+    User user = 1;
 }
 message LoginRequest{
     string username = 1;

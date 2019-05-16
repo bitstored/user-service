@@ -1,8 +1,11 @@
 module github.com/bitstored/user-service
 
 require (
+	github.com/asaskevich/EventBus v0.0.0-20180315140547-d46933a94f05 // indirect
 	github.com/bitstored/auth-service v0.0.0-20190421213439-fd45c1b44b29
+	github.com/bitstored/crypto-service v0.0.0-20190513000356-56607a8400a8
 	github.com/cenkalti/backoff v2.1.1+incompatible
+	github.com/flashmob/go-guerrilla v0.0.0-20190504150445-87453fe54c89
 	github.com/golang/protobuf v1.3.1
 	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0

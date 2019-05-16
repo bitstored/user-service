@@ -32,6 +32,7 @@ const (
 	ACTIVATED   = "Activated"
 	LOCKED      = "Locked"
 	DELETED     = "Deleted"
+	SALT        = "Salt"
 	DefaultMb   = 50 * 1024
 )
 
@@ -122,6 +123,7 @@ func (r *Repository) UpdateAccount(ctx context.Context, collectionName string, u
 		{EMAIL, user.Email},
 		{USERNAME, user.Username},
 		{PASSWORD, user.Password},
+		{SALT, user.Salt},
 		{DELETED, false},
 		{ACTIVATED, true},
 		{LOCKED, false},
@@ -192,7 +194,6 @@ func (r *Repository) Login(ctx context.Context, collectionName, username, passwo
 	collection := database.Collection(collectionName)
 	filter := bson.D{
 		{USERNAME, username},
-		{PASSWORD, password},
 		{DELETED, false},
 		{ACTIVATED, true},
 		{LOCKED, false},

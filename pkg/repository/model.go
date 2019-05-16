@@ -24,6 +24,7 @@ type User struct {
 	Deleted     bool               `bson:"Deleted"`
 	Activated   bool               `bson:"Activated"`
 	Locked      bool               `bson:"Locked"`
+	Salt        []byte             `bson:"Salt"`
 }
 
 type Payement struct {

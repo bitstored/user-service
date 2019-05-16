@@ -105,11 +105,36 @@
         },
         "parameters": [
           {
-            "name": "session_token",
+            "name": "id",
             "in": "query",
             "required": false,
-            "type": "string",
-            "format": "byte"
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/user/api/v1/account/list": {
+      "post": {
+        "operationId": "ListUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/account_serviceListUsersResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/account_serviceListUsersRequest"
+            }
           }
         ],
         "tags": [
@@ -370,7 +395,26 @@
       "type": "object"
     },
     "account_serviceGetAccountResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/account_serviceUser"
+        }
+      }
+    },
+    "account_serviceListUsersRequest": {
       "type": "object"
+    },
+    "account_serviceListUsersResponse": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/account_serviceUser"
+          }
+        }
+      }
     },
     "account_serviceLockAccountRequest": {
       "type": "object",
