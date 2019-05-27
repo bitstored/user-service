@@ -15,7 +15,7 @@ import (
 
 const (
 	ID          = "ID"
-	FIRSTNAME   = "FistName"
+	FIRSTNAME   = "FirstName"
 	LASTNAME    = "LastName"
 	BIRTHDAY    = "Birthday"
 	EMAIL       = "Email"
@@ -93,11 +93,11 @@ func (r *Repository) CreateAccount(ctx context.Context, collectionName string, u
 	return res, nil
 }
 
-func (r *Repository) ActivateAccount(ctx context.Context, collectionName string, userID primitive.ObjectID) (*mongo.UpdateResult, error) {
+func (r *Repository) ActivateAccount(ctx context.Context, collectionName string, email string) (*mongo.UpdateResult, error) {
 	database := r.Database(r.DatabaseName)
 	collection := database.Collection(collectionName)
 	filter := bson.D{
-		{ID, userID},
+		{EMAIL, email},
 		// {DELETED, false},
 		// {ACTIVATED, false},
 		// {LOCKED, false},
@@ -130,7 +130,7 @@ func (r *Repository) UpdateAccount(ctx context.Context, collectionName string, u
 	}
 	update := bson.D{
 		{"$set", bson.D{
-			{FIRSTNAME, user.FistName},
+			{FIRSTNAME, user.FirstName},
 			{LASTNAME, user.LastName},
 			{PHONENUMBER, user.PhoneNumber},
 			{PHOTO, user.Photo},
@@ -204,8 +204,11 @@ func (r *Repository) Login(ctx context.Context, collectionName, username, passwo
 		}},
 	}
 	res := collection.FindOne(ctx, filter)
-	_, err := collection.UpdateOne(ctx, filter, update)
+	ures, err := collection.UpdateOne(ctx, filter, update)
 	if err != nil {
+		return nil
+	}
+	if ures.ModifiedCount == 0 {
 		return nil
 	}
 	user := new(User)

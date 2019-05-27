@@ -1,0 +1,230 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "service.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/api/v1/email/validate": {
+      "get": {
+        "operationId": "ValidateEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/auth_serviceValidateEmailResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/auth/api/v1/password/validate": {
+      "get": {
+        "operationId": "ValidatePassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/auth_serviceValidatePasswordResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "password",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/auth/api/v1/token/generate": {
+      "get": {
+        "operationId": "GenerateJWT",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/auth_serviceGenerateJWTResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "firstName",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "is_admin",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/auth/api/v1/token/validate": {
+      "get": {
+        "operationId": "ValidateJWT",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/auth_serviceValidateJWTResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "firstName",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "is_admin",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "auth_serviceGenerateJWTResponse": {
+      "type": "object",
+      "properties": {
+        "response_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "response_message": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "auth_serviceValidateEmailResponse": {
+      "type": "object",
+      "properties": {
+        "response_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "response_message": {
+          "type": "string"
+        },
+        "is_valid": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    },
+    "auth_serviceValidateJWTResponse": {
+      "type": "object",
+      "properties": {
+        "response_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "response_message": {
+          "type": "string"
+        },
+        "is_valid": {
+          "type": "string"
+        },
+        "is_admin": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "auth_serviceValidatePasswordResponse": {
+      "type": "object",
+      "properties": {
+        "response_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "response_message": {
+          "type": "string"
+        },
+        "is_valid": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    }
+  }
+}

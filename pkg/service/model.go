@@ -6,13 +6,16 @@ import (
 )
 
 type Activation struct {
-	ID        primitive.ObjectID `bson:"ID"`
-	Token     []byte             `bson:"Token"`
-	ExpiresAt time.Time          `bson:"ExpiresAt"`
+	Email     string    `bson:"Email"`
+	Token     string    `bson:"Token"`
+	ExpiresAt time.Time `bson:"ExpiresAt"`
 }
 
 type Session struct {
-	ID        primitive.ObjectID `bson:"ID"`
-	Token     []byte
+	ID primitive.ObjectID `bson:"ID"`
+
+	FirstName string
+	LastName  string
+	Token     string
 	ExpiresAt time.Time
 }

@@ -7,7 +7,7 @@ import (
 
 type User struct {
 	ID          primitive.ObjectID `bson:"ID"`
-	FistName    string             `bson:"FistName"`
+	FirstName   string             `bson:"FirstName"`
 	LastName    string             `bson:"LastName"`
 	Birthday    time.Time          `bson:"Birthday"`
 	Email       string             `bson:"Email"`
@@ -24,6 +24,7 @@ type User struct {
 	Deleted     bool               `bson:"Deleted"`
 	Activated   bool               `bson:"Activated"`
 	Locked      bool               `bson:"Locked"`
+	IsAdmin     bool               `bson:"IsAdmin"`
 	Salt        []byte             `bson:"Salt"`
 }
 

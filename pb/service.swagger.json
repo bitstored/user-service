@@ -16,7 +16,7 @@
   ],
   "paths": {
     "/user/api/v1/account/activate": {
-      "post": {
+      "get": {
         "operationId": "ActivateAccount",
         "responses": {
           "200": {
@@ -28,12 +28,16 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/account_serviceActivateAccountRequest"
-            }
+            "name": "activation_token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "activation_date",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -83,8 +87,7 @@
             "name": "session_token",
             "in": "query",
             "required": false,
-            "type": "string",
-            "format": "byte"
+            "type": "string"
           }
         ],
         "tags": [
@@ -314,8 +317,7 @@
             "name": "session_token",
             "in": "query",
             "required": false,
-            "type": "string",
-            "format": "byte"
+            "type": "string"
           }
         ],
         "tags": [
@@ -351,24 +353,11 @@
     }
   },
   "definitions": {
-    "account_serviceActivateAccountRequest": {
-      "type": "object",
-      "properties": {
-        "activation_token": {
-          "type": "string",
-          "format": "byte"
-        },
-        "activation_date": {
-          "type": "string"
-        }
-      }
-    },
     "account_serviceActivateAccountResponse": {
       "type": "object",
       "properties": {
         "session_token": {
-          "type": "string",
-          "format": "byte"
+          "type": "string"
         }
       }
     },
@@ -420,8 +409,7 @@
       "type": "object",
       "properties": {
         "session_token": {
-          "type": "string",
-          "format": "byte"
+          "type": "string"
         }
       }
     },
@@ -443,8 +431,7 @@
       "type": "object",
       "properties": {
         "session_token": {
-          "type": "string",
-          "format": "byte"
+          "type": "string"
         }
       }
     },
@@ -480,8 +467,7 @@
       "type": "object",
       "properties": {
         "session_token": {
-          "type": "string",
-          "format": "byte"
+          "type": "string"
         },
         "email": {
           "type": "string"

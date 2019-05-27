@@ -41,36 +41,69 @@ func (s *Server) CreateAccount(ctx context.Context, in *pb.CreateAccountRequest)
 }
 
 func (s *Server) ResendActivationMail(ctx context.Context, in *pb.ResendActivationMailRequest) (*pb.ResendActivationMailResponse, error) {
-	return nil, nil
+
+	err := s.Service.ResendActivationMail(ctx, in.GetEmail())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ResendActivationMailResponse{}, nil
 }
+
 func (s *Server) ActivateAccount(ctx context.Context, in *pb.ActivateAccountRequest) (*pb.ActivateAccountResponse, error) {
-	return nil, nil
+	err := s.Service.ActivateAccount(ctx, in.GetActivationToken())
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.ActivateAccountResponse{}, nil
 }
+
 func (s *Server) UpdateAccount(ctx context.Context, in *pb.UpdateAccountRequest) (*pb.UpdateAccountResponse, error) {
 	return nil, nil
 }
+
 func (s *Server) DeleteAccount(ctx context.Context, in *pb.DeleteAccountRequest) (*pb.DeleteAccountResponse, error) {
 	return nil, nil
 }
+
 func (s *Server) GetAccount(ctx context.Context, in *pb.GetAccountRequest) (*pb.GetAccountResponse, error) {
 	return nil, nil
 }
+
 func (s *Server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginResponse, error) {
-	return nil, nil
+	token, err := s.Service.Login(ctx, in.GetUsername(), in.GetPassword())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.LoginResponse{SessionToken: token}, nil
 }
+
 func (s *Server) Logout(ctx context.Context, in *pb.LogoutRequest) (*pb.LogoutResponse, error) {
-	return nil, nil
+	_, err := s.Service.Logout(ctx, in.GetSessionToken())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.LogoutResponse{}, nil
 }
+
 func (s *Server) ResetPassword(ctx context.Context, in *pb.ResetPasswordRequest) (*pb.ResetPasswordResponse, error) {
 	return nil, nil
 }
+
 func (s *Server) LockAccount(ctx context.Context, in *pb.LockAccountRequest) (*pb.LockAccountResponse, error) {
 	return nil, nil
 }
+
 func (s *Server) RequestUnlockAccount(ctx context.Context, in *pb.RequestUnlockAccountRequest) (*pb.RequestUnlockAccountResponse, error) {
 	return nil, nil
 }
+
 func (s *Server) UnlockAccount(ctx context.Context, in *pb.UnlockAccountRequest) (*pb.UnlockAccountResponse, error) {
+	return nil, nil
+}
+
+func (s *Server) ListUsers(ctx context.Context, in *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
 	return nil, nil
 }
 

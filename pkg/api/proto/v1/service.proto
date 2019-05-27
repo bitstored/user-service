@@ -20,8 +20,7 @@ service Account {
     }
     rpc ActivateAccount(ActivateAccountRequest) returns (ActivateAccountResponse) {
         option (google.api.http) = {
-            post: "/user/api/v1/account/activate"
-            body: "*"
+            get: "/user/api/v1/account/activate"
         };
     }
     rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {
@@ -103,11 +102,11 @@ message CreateAccountResponse {
     string user_id = 1;
 }
 message ActivateAccountRequest {
-    bytes activation_token = 1;
+    string activation_token = 1;
     string activation_date = 2;
 }
 message ActivateAccountResponse {
-    bytes session_token = 1;
+    string session_token = 1;
 }
 message ResendActivationMailRequest {
     string email = 1;
@@ -121,7 +120,7 @@ message UpdateAccountRequest {
 message UpdateAccountResponse {
 }
 message DeleteAccountRequest{
-    bytes session_token = 1;
+    string session_token = 1;
 }
 message DeleteAccountResponse{  
 }
@@ -136,15 +135,15 @@ message LoginRequest{
     string password = 2;
 }
 message LoginResponse{
-    bytes session_token = 1;    
+    string session_token = 1;    
 }
 message LogoutRequest{
-    bytes session_token = 1;
+    string session_token = 1;
 }
 message LogoutResponse{
 }
 message ResetPasswordRequest{
-    bytes session_token = 1;
+    string session_token = 1;
     string email = 2;
     string old_password = 3;
     string new_password = 4;
@@ -152,7 +151,7 @@ message ResetPasswordRequest{
 message ResetPasswordResponse{
 }
 message LockAccountRequest{
-    bytes session_token = 1;
+    string session_token = 1;
 }
 message LockAccountResponse{
 }

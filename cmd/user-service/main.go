@@ -115,7 +115,7 @@ func main() {
 		}
 	}()
 
-	fmt.Printf("Auth server listening on  %s for gRPC\nAuth server listening on on %s for http\n", *grpcAddr, *httpAddr)
+	fmt.Printf("User server listening on  %s for gRPC\nUser server listening on on %s for http\n", *grpcAddr, *httpAddr)
 
 	sigs := make(chan os.Signal, 1)
 	done := make(chan bool, 1)

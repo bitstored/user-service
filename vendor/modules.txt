@@ -1,8 +1,11 @@
 # github.com/beorn7/perks v1.0.0
 github.com/beorn7/perks/quantile
-# github.com/bitstored/auth-service v0.0.0-20190421213439-fd45c1b44b29
+# github.com/bitstored/auth-service v0.0.0-20190516231623-fc9adb79b1a6
+github.com/bitstored/auth-service/pb
 github.com/bitstored/auth-service/pkg/validator
 github.com/bitstored/auth-service/errors
+# github.com/bitstored/crypto-service v0.0.0-20190513000356-56607a8400a8
+github.com/bitstored/crypto-service/pb
 # github.com/cenkalti/backoff v2.1.1+incompatible
 github.com/cenkalti/backoff
 # github.com/davecgh/go-spew v1.1.1
@@ -26,7 +29,7 @@ github.com/golang/protobuf/protoc-gen-go/plugin
 github.com/golang/snappy
 # github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 github.com/grpc-ecosystem/go-grpc-prometheus
-# github.com/grpc-ecosystem/grpc-gateway v1.8.6
+# github.com/grpc-ecosystem/grpc-gateway v1.9.0
 github.com/grpc-ecosystem/grpc-gateway/runtime
 github.com/grpc-ecosystem/grpc-gateway/utilities
 github.com/grpc-ecosystem/grpc-gateway/internal
@@ -34,18 +37,19 @@ github.com/grpc-ecosystem/grpc-gateway/internal
 github.com/matttproud/golang_protobuf_extensions/pbutil
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
-# github.com/prometheus/client_golang v0.9.3-0.20190127221311-3c4408c8b829
+# github.com/prometheus/client_golang v0.9.3
 github.com/prometheus/client_golang/prometheus
 github.com/prometheus/client_golang/prometheus/promhttp
 github.com/prometheus/client_golang/prometheus/internal
 # github.com/prometheus/client_model v0.0.0-20190129233127-fd36f4220a90
 github.com/prometheus/client_model/go
-# github.com/prometheus/common v0.3.0
+# github.com/prometheus/common v0.4.0
 github.com/prometheus/common/expfmt
 github.com/prometheus/common/model
 github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg
-# github.com/prometheus/procfs v0.0.0-20190416084830-8368d24ba045
+# github.com/prometheus/procfs v0.0.0-20190516194456-169873baca24
 github.com/prometheus/procfs
+github.com/prometheus/procfs/internal/fs
 # github.com/stretchr/testify v1.3.0
 github.com/stretchr/testify/require
 github.com/stretchr/testify/assert
@@ -53,7 +57,7 @@ github.com/stretchr/testify/assert
 github.com/xdg/scram
 # github.com/xdg/stringprep v1.0.0
 github.com/xdg/stringprep
-# go.mongodb.org/mongo-driver v1.0.0-rc1
+# go.mongodb.org/mongo-driver v1.0.2
 go.mongodb.org/mongo-driver/bson
 go.mongodb.org/mongo-driver/bson/primitive
 go.mongodb.org/mongo-driver/mongo
@@ -73,20 +77,20 @@ go.mongodb.org/mongo-driver/x/mongo/driver/session
 go.mongodb.org/mongo-driver/x/mongo/driver/topology
 go.mongodb.org/mongo-driver/x/mongo/driver/uuid
 go.mongodb.org/mongo-driver/x/network/command
-go.mongodb.org/mongo-driver/x/network/compressor
 go.mongodb.org/mongo-driver/x/network/connection
 go.mongodb.org/mongo-driver/x/network/connstring
 go.mongodb.org/mongo-driver/x/network/description
 go.mongodb.org/mongo-driver/x/network/result
-go.mongodb.org/mongo-driver/x/network/wiremessage
 go.mongodb.org/mongo-driver/tag
+go.mongodb.org/mongo-driver/x/network/wiremessage
 go.mongodb.org/mongo-driver/x/mongo/driver/auth/internal/gssapi
 go.mongodb.org/mongo-driver/x/network/address
 go.mongodb.org/mongo-driver/version
+go.mongodb.org/mongo-driver/x/network/compressor
 go.mongodb.org/mongo-driver/internal
 # golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f
 golang.org/x/crypto/pbkdf2
-# golang.org/x/net v0.0.0-20190509222800-a4d6f7feada5
+# golang.org/x/net v0.0.0-20190514140710-3ec191127204
 golang.org/x/net/context
 golang.org/x/net/trace
 golang.org/x/net/internal/timeseries
@@ -96,14 +100,14 @@ golang.org/x/net/http/httpguts
 golang.org/x/net/idna
 # golang.org/x/sync v0.0.0-20190423024810-112230192c58
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.0.0-20190419153524-e8e3143a4f4a
+# golang.org/x/sys v0.0.0-20190516110030-61b9204099cb
 golang.org/x/sys/unix
-# golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2
+# golang.org/x/text v0.3.2
 golang.org/x/text/unicode/norm
 golang.org/x/text/secure/bidirule
 golang.org/x/text/unicode/bidi
 golang.org/x/text/transform
-# google.golang.org/genproto v0.0.0-20190513181449-d00d292a067c
+# google.golang.org/genproto v0.0.0-20190516172635-bb713bdc0e52
 google.golang.org/genproto/googleapis/api/annotations
 google.golang.org/genproto/googleapis/api/httpbody
 google.golang.org/genproto/protobuf/field_mask
