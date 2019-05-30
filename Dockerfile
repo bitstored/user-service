@@ -8,7 +8,7 @@ FROM alpine as runner
 LABEL name="bitstored/user-service"
 RUN apk --update add ca-certificates
 COPY --from=source /home/server/cmd/user-service/user-service /home/user-service
-COPY --from=source /home/server/scripts/localhost.* /home/scripts/
+COPY --from=source /home/server/scripts/server.* /home/scripts/
 
 WORKDIR /home
 EXPOSE 4008
