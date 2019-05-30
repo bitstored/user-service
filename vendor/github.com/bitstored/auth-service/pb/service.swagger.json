@@ -199,7 +199,8 @@
           "type": "string"
         },
         "is_valid": {
-          "type": "string"
+          "type": "boolean",
+          "format": "boolean"
         },
         "is_admin": {
           "type": "boolean",

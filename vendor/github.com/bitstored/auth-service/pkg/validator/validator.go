@@ -11,7 +11,7 @@ var (
 	numbersRegex         = regexp.MustCompile(".*[0-9].*")
 	symbolRegex          = regexp.MustCompile(".*[!@#$&*()_+=?,].*")
 	emailPattern         = regexp.MustCompile("^[-a-zA-Z0-9_.+_]{5,}@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]{2,4}$")
-	usernamePattern      = regexp.MustCompile("^[-_A-Za-z0-9.$")
+	usernamePattern      = regexp.MustCompile("^[-_A-Za-z0-9.]$")
 	ErrMsgEmailInvalid   = "email is not a valid email address format"
 	ErrMsgPasswordShort  = "password is too short: minimal length is 8 symbols"
 	ErrMsgPasswordLong   = "password is too long: maximal length is 100 symbols"
