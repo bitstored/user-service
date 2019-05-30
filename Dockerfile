@@ -10,10 +10,6 @@ RUN apk --update add ca-certificates
 COPY --from=source /home/server/cmd/user-service/user-service /home/user-service
 COPY --from=source /home/server/scripts/localhost.* /home/scripts/
 
-FROM envoyproxy/envoy:latest
-COPY envoy/envoy.yaml /etc/envoy/envoy.yaml
-CMD /usr/local/bin/envoy -c /etc/envoy/envoy.yaml
-
 WORKDIR /home
 EXPOSE 4008
 EXPOSE 5008

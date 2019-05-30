@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"time"
@@ -72,6 +73,7 @@ func (s *Server) GetAccount(ctx context.Context, in *pb.GetAccountRequest) (*pb.
 }
 
 func (s *Server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginResponse, error) {
+	fmt.Printf("Login %v %v\n", ctx, in)
 	token, err := s.Service.Login(ctx, in.GetUsername(), in.GetPassword())
 	if err != nil {
 		return nil, err

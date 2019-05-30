@@ -18,12 +18,10 @@ import (
 
 	"github.com/cenkalti/backoff"
 	"github.com/prometheus/client_golang/prometheus"
-
 	// grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	// grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -37,8 +35,8 @@ var (
 	dbName   = "bitstored"
 	grpcAddr = flag.String("grpc", "localhost:4008", "gRPC API address")
 	httpAddr = flag.String("http", "localhost:5008", "HTTP API address")
-	cert     = flag.String("cert", "scripts/localhost.pem", "certificate pathname")
-	certKey  = flag.String("certkey", "scripts/localhost.key", "private key pathname")
+	cert     = flag.String("cert", "scripts/server.crt", "certificate pathname")
+	certKey  = flag.String("certkey", "scripts/server.key", "private key pathname")
 )
 
 func main() {
@@ -103,7 +101,7 @@ func main() {
 	mux.Handle("/", gw)
 
 	httpServer := &http.Server{
-		Handler:      mux,
+		Handler:      allowCORS(mux),
 		Addr:         *httpAddr,
 		WriteTimeout: 30 * time.Second,
 		ReadTimeout:  30 * time.Second,
@@ -134,6 +132,7 @@ func main() {
 	// Doesn't block if no connections, will wait until the timeout deadline otherwise.
 	log.Println("shutting down")
 	err = httpServer.Shutdown(ctx)
+	gRPCServer.Stop()
 	if err != nil {
 		panic(err)
 	}
