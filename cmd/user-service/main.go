@@ -33,8 +33,8 @@ const (
 var (
 	hostName = flag.String("mongo", "mongodb://localhost:27017", "mongo driver address")
 	dbName   = "bitstored"
-	grpcAddr = flag.String("grpc", "localhost:4008", "gRPC API address")
-	httpAddr = flag.String("http", "localhost:5008", "HTTP API address")
+	grpcAddr = flag.String("grpc", ":4008", "gRPC API address")
+	httpAddr = flag.String("http", ":5008", "HTTP API address")
 	cert     = flag.String("cert", "scripts/server.crt", "certificate pathname")
 	certKey  = flag.String("certkey", "scripts/server.key", "private key pathname")
 )
