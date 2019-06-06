@@ -261,7 +261,6 @@ func (r *Repository) LockAccount(ctx context.Context, collectionName, userID, pa
 	collection := database.Collection(collectionName)
 	filter := bson.D{
 		{ID, userID},
-		{PASSWORD, password},
 		{DELETED, false},
 		{ACTIVATED, true},
 		{LOCKED, false},
@@ -285,7 +284,6 @@ func (r *Repository) UnlockAccount(ctx context.Context, collectionName, userID, 
 	collection := database.Collection(collectionName)
 	filter := bson.D{
 		{ID, userID},
-		{PASSWORD, password},
 		{DELETED, false},
 		{ACTIVATED, true},
 		{LOCKED, true},
@@ -304,6 +302,24 @@ func (r *Repository) UnlockAccount(ctx context.Context, collectionName, userID, 
 	return res, nil
 }
 
+func (r *Repository) ListUsers(ctx context.Context, collectionName string) ([]*User, error) {
+	database := r.Database(r.DatabaseName)
+	collection := database.Collection(collectionName)
+	filter := bson.D{
+		{DELETED, false},
+	}
+	res, err := collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	users := make([]*User, 0)
+	for res.Next(ctx) {
+		user := new(User)
+		res.Decode(&user)
+		users = append(users, user)
+	}
+	return users, nil
+}
 func (r *Repository) dataExists(ctx context.Context, collection *mongo.Collection, fieldName, fieldValue string) bool {
 	filter := bson.D{
 		{fieldName, fieldValue},

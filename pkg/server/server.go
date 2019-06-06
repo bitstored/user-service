@@ -99,11 +99,19 @@ func (s *Server) Logout(ctx context.Context, in *pb.LogoutRequest) (*pb.LogoutRe
 }
 
 func (s *Server) ResetPassword(ctx context.Context, in *pb.ResetPasswordRequest) (*pb.ResetPasswordResponse, error) {
-	return nil, nil
+	_, err := s.Service.ResetPassword(ctx, in.GetSessionToken(), in.GetOldPassword(), in.GetNewPassword())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ResetPasswordResponse{}, nil
 }
 
 func (s *Server) LockAccount(ctx context.Context, in *pb.LockAccountRequest) (*pb.LockAccountResponse, error) {
-	return nil, nil
+	_, err := s.Service.LockAccount(ctx, in.GetSessionToken(), in.GetUserId())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.LockAccountResponse{}, nil
 }
 
 func (s *Server) RequestUnlockAccount(ctx context.Context, in *pb.RequestUnlockAccountRequest) (*pb.RequestUnlockAccountResponse, error) {
@@ -111,11 +119,19 @@ func (s *Server) RequestUnlockAccount(ctx context.Context, in *pb.RequestUnlockA
 }
 
 func (s *Server) UnlockAccount(ctx context.Context, in *pb.UnlockAccountRequest) (*pb.UnlockAccountResponse, error) {
-	return nil, nil
+	_, err := s.Service.UnlockAccount(ctx, in.GetSessionToken(), in.GetUserId())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.UnlockAccountResponse{}, nil
 }
 
 func (s *Server) ListUsers(ctx context.Context, in *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
-	return nil, nil
+	users, err := s.Service.ListUsers(ctx, in.GetSessionToken())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ListUsersResponse{Users: users}, nil
 }
 
 func validateUser(user pb.User) error {

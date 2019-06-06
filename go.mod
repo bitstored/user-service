@@ -32,6 +32,7 @@ require (
 	github.com/sirupsen/logrus v1.4.1 // indirect
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.3.0
+	github.com/tidwall/pretty v1.0.0 // indirect
 	go.mongodb.org/mongo-driver v1.0.2
 	go.opencensus.io v0.20.2 // indirect
 	golang.org/x/exp v0.0.0-20190419195159-b8972e603456 // indirect

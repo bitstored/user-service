@@ -217,11 +217,17 @@ func (s *Service) Logout(ctx context.Context, token string) (bool, error) {
 	}
 	return false, fmt.Errorf("Unable to logout")
 }
+
 func (s *Service) ResetPassword(ctx context.Context, token, password, newPassword string) (bool, error) {
 	session, ok := s.Sessions[token]
 	if !ok {
 		return false, fmt.Errorf("Session token invalid")
 	}
+	_, err1 := validator.Password(newPassword)
+	if err1 != nil {
+		return false, err1.Error()
+	}
+
 	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
 	if u == nil {
 		return false, fmt.Errorf("User not found")
@@ -241,15 +247,96 @@ func (s *Service) ResetPassword(ctx context.Context, token, password, newPasswor
 }
 func (s *Service) LockAccount(ctx context.Context, token, userID string) (bool, error) {
 
+	session, ok := s.Sessions[token]
+	if !ok {
+		return false, fmt.Errorf("Session token invalid")
+	}
+
+	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
+	if u == nil {
+		return false, fmt.Errorf("User not found")
+	}
+
+	if session.ID.String() == userID || u.IsAdmin {
+		res, err := s.Repo.LockAccount(ctx, USER_COLLECTION_NAME, userID, "")
+		if err != nil {
+			return false, err
+		}
+		if res.ModifiedCount != 1 {
+			return false, fmt.Errorf("User not found")
+		}
+	}
+
 	return true, nil
 }
-func (s *Service) RequestUnlockAccount(ctx context.Context) (error, error) {
+func (s *Service) RequestUnlockAccount(ctx context.Context) (bool, error) {
 
-	return nil, nil
+	return false, nil
 }
-func (s *Service) UnlockAccount(ctx context.Context) (error, error) {
+func (s *Service) UnlockAccount(ctx context.Context, token, userID string) (bool, error) {
 
-	return nil, nil
+	session, ok := s.Sessions[token]
+	if !ok {
+		return false, fmt.Errorf("Session token invalid")
+	}
+
+	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
+	if u == nil {
+		return false, fmt.Errorf("User not found")
+	}
+
+	if session.ID.String() == userID || u.IsAdmin {
+		res, err := s.Repo.UnlockAccount(ctx, USER_COLLECTION_NAME, userID, "")
+		if err != nil {
+			return false, err
+		}
+		if res.ModifiedCount != 1 {
+			return false, fmt.Errorf("User not found")
+		}
+	}
+
+	return true, nil
+}
+
+func (s *Service) ListUsers(ctx context.Context, token string) ([]*pb.User, error) {
+
+	session, ok := s.Sessions[token]
+	if !ok {
+		return nil, fmt.Errorf("Session token invalid")
+	}
+
+	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
+	if u == nil {
+		return nil, fmt.Errorf("User not found")
+	}
+	if !u.IsAdmin {
+		return nil, fmt.Errorf("Access denied")
+	}
+
+	users, err := s.Repo.ListUsers(ctx, USER_COLLECTION_NAME)
+	if err != nil {
+		return nil, fmt.Errorf("Access denied")
+	}
+	pbUsers := make([]*pb.User, 0)
+	for _, u := range users {
+		U := new(pb.User)
+		U.AvailableMb = u.AvailableMb
+		U.Birthday = u.Birthday.String()
+		U.Email = u.Email
+		U.FirstName = u.FirstName
+		U.LastName = u.LastName
+		U.PhoneNumber = u.PhoneNumber
+		U.Photo = u.Photo
+		U.Username = u.Username
+		U.IsActivated = u.Activated
+		U.IsAdmin = u.IsAdmin
+		U.IsLocked = u.Locked
+		U.LastEdited = u.LastEdited.String()
+		U.LastLogin = u.LastLogin.String()
+		U.Created = u.CreatedAt.String()
+		pbUsers = append(pbUsers, U)
+	}
+	return pbUsers, nil
 }
 
 func (s *Service) addActivation(email string, code string) {

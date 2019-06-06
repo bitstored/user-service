@@ -92,6 +92,12 @@ message User {
     string phone_number = 7;
     bytes photo = 8;
     uint32 available_mb = 9;
+    bool is_admin = 10;
+    bool is_locked = 11;
+    bool is_activated = 12;
+    string last_login = 13;
+    string last_edited = 14;
+    string created = 15;
 }
 
 message CreateAccountRequest {
@@ -152,12 +158,14 @@ message ResetPasswordResponse{
 }
 message LockAccountRequest{
     string session_token = 1;
+    string user_id = 2;
 }
 message LockAccountResponse{
 }
 message UnlockAccountRequest{
     string email = 1;
-    string token = 2;
+    string session_token = 2;
+    string user_id = 3;
 }
 message UnlockAccountResponse{ 
 }
@@ -168,6 +176,7 @@ message RequestUnlockAccountRequest{
 message RequestUnlockAccountResponse{
 }
 message ListUsersRequest {
+    string session_token = 1;
 }
 message ListUsersResponse {
     repeated User users = 1;

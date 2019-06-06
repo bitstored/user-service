@@ -392,7 +392,12 @@
       }
     },
     "account_serviceListUsersRequest": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "session_token": {
+          "type": "string"
+        }
+      }
     },
     "account_serviceListUsersResponse": {
       "type": "object",
@@ -409,6 +414,9 @@
       "type": "object",
       "properties": {
         "session_token": {
+          "type": "string"
+        },
+        "user_id": {
           "type": "string"
         }
       }
@@ -489,7 +497,10 @@
         "email": {
           "type": "string"
         },
-        "token": {
+        "session_token": {
+          "type": "string"
+        },
+        "user_id": {
           "type": "string"
         }
       }
@@ -542,6 +553,27 @@
         "available_mb": {
           "type": "integer",
           "format": "int64"
+        },
+        "is_admin": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "is_locked": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "is_activated": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "last_login": {
+          "type": "string"
+        },
+        "last_edited": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string"
         }
       }
     }
