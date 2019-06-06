@@ -66,13 +66,19 @@ func (r *Repository) CreateAccount(ctx context.Context, collectionName string, u
 
 	r.Lock.RLock()
 	if !r.dataExists(ctx, collection, EMAIL, user.Email) {
-		return nil, fmt.Errorf("account can't be created, %s = %s is already in use", EMAIL, user.Email)
+		err := fmt.Errorf("account can't be created, %s = %s is already in use", EMAIL, user.Email)
+		LogEvent(EVENT_TYPE_INSERT, STATUS_ERROR, err, user)
+		return nil, err
 	}
 	if !r.dataExists(ctx, collection, USERNAME, user.Username) {
-		return nil, fmt.Errorf("account can't be created, %s = %s is already in use", USERNAME, user.Username)
+		err := fmt.Errorf("account can't be created, %s = %s is already in use", USERNAME, user.Username)
+		LogEvent(EVENT_TYPE_INSERT, STATUS_ERROR, err, user)
+		return nil, err
 	}
 	if !r.dataExists(ctx, collection, PHONENUMBER, user.PhoneNumber) {
-		return nil, fmt.Errorf("account can't be created, %s = %s is already in use", PHONENUMBER, user.PhoneNumber)
+		err := fmt.Errorf("account can't be created, %s = %s is already in use", PHONENUMBER, user.PhoneNumber)
+		LogEvent(EVENT_TYPE_INSERT, STATUS_ERROR, err, user)
+		return nil, err
 	}
 	r.Lock.RUnlock()
 
@@ -87,9 +93,12 @@ func (r *Repository) CreateAccount(ctx context.Context, collectionName string, u
 	r.Lock.Unlock()
 
 	if err != nil {
+		LogEvent(EVENT_TYPE_INSERT, STATUS_ERROR, err, user)
 		return nil, err
 	}
-
+	if res.InsertedID != nil {
+		LogEvent(EVENT_TYPE_INSERT, STATUS_SUCCESS, nil, user)
+	}
 	return res, nil
 }
 
@@ -105,13 +114,19 @@ func (r *Repository) ActivateAccount(ctx context.Context, collectionName string,
 	update := bson.D{
 		{"$set", bson.D{
 			{ACTIVATED, true},
-			{LASTEDITED, time.Now()},
+			{LASTEDITED, time.Now().String()},
 		}},
 	}
-	res, err := collection.UpdateOne(ctx, filter, update)
+	res, err := collection.UpdateMany(ctx, filter, update)
 	if err != nil {
+		LogEvent(EVENT_TYPE_UPDATE, STATUS_ERROR, err, filter)
 		return nil, err
 	}
+	if res.ModifiedCount > 0 {
+		LogEvent(EVENT_TYPE_UPDATE, STATUS_SUCCESS, nil, filter)
+
+	}
+	LogEvent(EVENT_TYPE_UPDATE, STATUS_ERROR, err, filter)
 	return res, nil
 }
 

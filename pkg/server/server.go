@@ -23,6 +23,7 @@ func (s *Server) CreateAccount(ctx context.Context, in *pb.CreateAccountRequest)
 
 	user := *in.GetUser()
 
+	fmt.Printf("user %v \n\n\n\n\n", in.GetUser())
 	err := validateUser(user)
 	if err != nil {
 		return nil, err
@@ -33,12 +34,12 @@ func (s *Server) CreateAccount(ctx context.Context, in *pb.CreateAccountRequest)
 		return nil, err
 	}
 
-	err = s.Service.CreateAccount(ctx, user.GetFirstName(), user.GetLastName(), date, user.GetEmail(), user.GetUsername(), user.GetPassword(), user.GetPhoneNumber(), user.GetPhoto())
+	uid, err := s.Service.CreateAccount(ctx, user.GetFirstName(), user.GetLastName(), date, user.GetEmail(), user.GetUsername(), user.GetPassword(), user.GetPhoneNumber(), user.GetPhoto())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	return &pb.CreateAccountResponse{}, nil
+	return &pb.CreateAccountResponse{UserId: uid}, nil
 }
 
 func (s *Server) ResendActivationMail(ctx context.Context, in *pb.ResendActivationMailRequest) (*pb.ResendActivationMailResponse, error) {
@@ -69,15 +70,23 @@ func (s *Server) DeleteAccount(ctx context.Context, in *pb.DeleteAccountRequest)
 }
 
 func (s *Server) GetAccount(ctx context.Context, in *pb.GetAccountRequest) (*pb.GetAccountResponse, error) {
-	return nil, nil
+	token := in.GetId()
+	if token == "" {
+		return nil, status.Error(codes.InvalidArgument, "User not found")
+	}
+	user, err := s.Service.GetAccount(ctx, token)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &pb.GetAccountResponse{User: user}, nil
 }
 
 func (s *Server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginResponse, error) {
-	fmt.Printf("Login %v %v\n", ctx, in)
 	token, err := s.Service.Login(ctx, in.GetUsername(), in.GetPassword())
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("Login %s %s, token %v\n", in.Username, in.Password, token)
 	return &pb.LoginResponse{SessionToken: token}, nil
 }
 

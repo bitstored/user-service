@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"flag"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -29,6 +30,18 @@ const (
 	usernameGood2  = "username2"
 	phoneNumber2   = "1234567"
 )
+
+var hostName = flag.String("mongo", "mongodb://localhost:27017", "mongo driver address")
+
+func TestAnActivateAccount(t *testing.T) {
+	repo, err := NewRepository(*hostName, "bitstored")
+	defer repo.Disconnect(context.TODO())
+
+	require.NoError(t, err)
+	resp, err := repo.ActivateAccount(context.TODO(), "users", "anablana@diana.com")
+	require.NoError(t, err)
+	require.Equal(t, int64(1), resp.MatchedCount)
+}
 
 func TestNewRepository(t *testing.T) {
 	test := Test{"TestCreate", "fieldCreate", false}
@@ -153,7 +166,7 @@ func TestActivateAccount(t *testing.T) {
 			require.NoError(t, err)
 			require.NotNil(t, res.InsertedID)
 			if tc1.Success {
-				res1, err := r.ActivateAccount(context.TODO(), collectionName, tc1.User1.ID)
+				res1, err := r.ActivateAccount(context.TODO(), collectionName, tc1.User1.Email)
 				require.NoErrorf(t, err, "err: %v\nres: %v", err, res1)
 				require.NotNil(t, res1)
 				time.Sleep(1000 * time.Nanosecond)
@@ -234,7 +247,7 @@ func TestUpdateAccount(t *testing.T) {
 			require.NotNil(t, res.InsertedID)
 			if tc1.Success {
 				tc1.User1.LastName = "LasstName"
-				tc1.User1.FistName = "FirsstName"
+				tc1.User1.FirstName = "FirsstName"
 
 				res1, err := r.UpdateAccount(context.TODO(), collectionName, tc1.User1.ID, tc1.User1)
 				require.NoErrorf(t, err, "err: %v\nres: %v", err, res1)
@@ -242,7 +255,7 @@ func TestUpdateAccount(t *testing.T) {
 				time.Sleep(1000 * time.Nanosecond)
 			} else {
 				tc1.User1.LastName = "LasstName"
-				tc1.User1.FistName = "FirsstName"
+				tc1.User1.FirstName = "FirsstName"
 
 				res1, err := r.UpdateAccount(context.TODO(), collectionName, tc1.User1.ID, tc1.User1)
 				require.Errorf(t, err, "err: %v\nres: %v", err, res1)
@@ -255,13 +268,13 @@ func TestUpdateAccount(t *testing.T) {
 				require.True(t, user.Activated)
 				require.False(t, user.Deleted)
 				require.False(t, user.Locked)
-				require.Equal(t, tc1.User1.FistName, user.FistName)
+				require.Equal(t, tc1.User1.FirstName, user.FirstName)
 				require.Equal(t, tc1.User1.LastName, user.LastName)
 			} else {
 				require.False(t, user.Activated)
 				require.False(t, user.Deleted)
 				require.False(t, user.Locked)
-				require.Empty(t, user.FistName)
+				require.Empty(t, user.FirstName)
 				require.Empty(t, user.LastName)
 			}
 		})

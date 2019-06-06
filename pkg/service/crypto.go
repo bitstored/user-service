@@ -9,7 +9,7 @@ import (
 
 const (
 	gRPCPortCrypto = "localhost:4004"
-	iterationCount = 1000
+	iterationCount = 4096
 	saltLen        = 32
 )
 

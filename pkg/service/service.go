@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"fmt"
+	"github.com/bitstored/user-service/pb"
 	"time"
 
 	auth "github.com/bitstored/auth-service/pb"
@@ -36,27 +37,29 @@ type Service struct {
 
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
-		Repo: repo,
+		Repo:        repo,
+		Activations: make(map[string]Activation),
+		Sessions:    make(map[string]Session),
 	}
 }
 
-func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay time.Time, email, uname, pass, pNumber string, photo []byte) error {
+func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay time.Time, email, uname, pass, pNumber string, photo []byte) (string, error) {
 
 	_, err1 := validator.Password(pass)
 	if err1 != nil {
-		return err1.Error()
+		return "", err1.Error()
 	}
 
 	ok := validator.Email(email)
 	if !ok {
-		return fmt.Errorf("Email is invalid")
+		return "", fmt.Errorf("Email is invalid")
 	}
 	// Encrypt pass
 	salt := newSalt()
 	hash, err := encryptPassword(pass, salt)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 	user := repository.User{
 		ID:          primitive.NewObjectID(),
@@ -74,11 +77,11 @@ func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay t
 	res, err := s.Repo.CreateAccount(ctx, USER_COLLECTION_NAME, user)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if res.InsertedID == nil {
-		return fmt.Errorf("unable to create user")
+		return "", fmt.Errorf("unable to create user")
 	}
 
 	// Generate activation token
@@ -87,12 +90,12 @@ func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay t
 	s.Activations[string(token)] = Activation{email, string(token), time.Now().Add(EXPIRES_AFTER_MINUTES_PERIOD * time.Minute)}
 
 	// send activation mail
-	smtpServer := NewSmtpServer(SMTP_HOST, SMTP_PORT)
-	messages := []Message{{to: email, sender: SMTP_ADMIN_USERNAME, password: SMTP_ADMIN_PASSWORD, subject: "Activation mail", link: HOST + "/user/api/v1/account/activate/" + string(token)}}
+	// smtpServer := NewSmtpServer(SMTP_HOST, SMTP_PORT)
+	// messages := []Message{{to: email, sender: SMTP_ADMIN_USERNAME, password: SMTP_ADMIN_PASSWORD, subject: "Activation mail", link: HOST + "/activate/" + string(token)}}
 
-	err = smtpServer.sendMail(ctx, messages)
+	// err = smtpServer.sendMail(ctx, messages)
 
-	return err
+	return user.ID.String(), nil
 }
 
 func (s *Service) ResendActivationMail(ctx context.Context, email string) error {
@@ -121,18 +124,58 @@ func (s *Service) ActivateAccount(ctx context.Context, token string) error {
 }
 
 func (s *Service) UpdateAccount(ctx context.Context) (error, error) {
+
 	return nil, nil
 }
 
-func (s *Service) DeleteAccount(ctx context.Context) (error, error) {
-	return nil, nil
+func (s *Service) DeleteAccount(ctx context.Context, token, password string) (bool, error) {
+	session, ok := s.Sessions[token]
+	if !ok {
+		return false, fmt.Errorf("Session token is invalid")
+	}
+	uid := session.ID
+
+	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
+	if u == nil {
+		return false, fmt.Errorf("Session token is invalid")
+	}
+	salt := u.Salt
+	password, err := encryptPassword(password, salt)
+	if err != nil {
+		return false, err
+	}
+	res, err := s.Repo.DeleteAccount(ctx, USER_COLLECTION_NAME, uid, password)
+	if err != nil || res.ModifiedCount == 0 {
+		return false, err
+	}
+	return true, nil
 }
 
-func (s *Service) GetAccount(ctx context.Context) (error, error) {
-	return nil, nil
+func (s *Service) GetAccount(ctx context.Context, token string) (*pb.User, error) {
+	session, ok := s.Sessions[token]
+	if !ok {
+		return nil, fmt.Errorf("Session token is invalid")
+	}
+	ok = s.validateToken(ctx, token, session.ID, session.FirstName, session.LastName)
+	if !ok {
+		return nil, fmt.Errorf("Session token is invalid")
+	}
+	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
+	if u == nil {
+		return nil, fmt.Errorf("User not found")
+	}
+	user := &pb.User{
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Email:     u.Email,
+		Username:  u.Username,
+		Birthday:  u.Birthday.String(),
+	}
+	return user, nil
 }
 
 func (s *Service) Login(ctx context.Context, username, password string) (string, error) {
+
 	if username == "" {
 		return "", fmt.Errorf("empty username")
 	}
@@ -155,8 +198,10 @@ func (s *Service) Login(ctx context.Context, username, password string) (string,
 	}
 	//TODO add attempts
 
-	token := s.createToken(ctx, *user)
-
+	token, err := s.createToken(ctx, *user)
+	if err != nil {
+		return "", err
+	}
 	s.Sessions[token] = Session{ID: user.ID, FirstName: user.FirstName, LastName: user.LastName, ExpiresAt: time.Now().Add(time.Hour * EXPIRES_AFTER_HOURS_PERIOD)}
 
 	return token, nil
@@ -172,16 +217,38 @@ func (s *Service) Logout(ctx context.Context, token string) (bool, error) {
 	}
 	return false, fmt.Errorf("Unable to logout")
 }
-func (s *Service) ResetPassword(ctx context.Context) (error, error) {
-	return nil, nil
+func (s *Service) ResetPassword(ctx context.Context, token, password, newPassword string) (bool, error) {
+	session, ok := s.Sessions[token]
+	if !ok {
+		return false, fmt.Errorf("Session token invalid")
+	}
+	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
+	if u == nil {
+		return false, fmt.Errorf("User not found")
+	}
+	newPassword, err := encryptPassword(newPassword, u.Salt)
+	if err != nil {
+		return false, err
+	}
+	res, err := s.Repo.ResetPassword(ctx, USER_COLLECTION_NAME, session.ID.String(), u.Password, newPassword)
+	if err != nil {
+		return false, err
+	}
+	if res.ModifiedCount != 1 {
+		return false, fmt.Errorf("User not found")
+	}
+	return true, nil
 }
-func (s *Service) LockAccount(ctx context.Context) (error, error) {
-	return nil, nil
+func (s *Service) LockAccount(ctx context.Context, token, userID string) (bool, error) {
+
+	return true, nil
 }
 func (s *Service) RequestUnlockAccount(ctx context.Context) (error, error) {
+
 	return nil, nil
 }
 func (s *Service) UnlockAccount(ctx context.Context) (error, error) {
+
 	return nil, nil
 }
 
@@ -229,22 +296,22 @@ func (s *Service) validateToken(ctx context.Context, token string, uid primitive
 	return rsp.GetIsValid()
 }
 
-func (s *Service) createToken(ctx context.Context, user repository.User) string {
+func (s *Service) createToken(ctx context.Context, user repository.User) (string, error) {
 
 	conn, err := grpc.Dial(AUTH_GRPC_PORT, grpc.WithInsecure())
 	defer conn.Close()
 
 	if err != nil {
-		return ""
+		return "", err
 	}
 	client := auth.NewAuthServiceClient(conn)
 
 	req := &auth.GenerateJWTRequest{UserId: user.ID.String(), FirstName: user.FirstName, Lastname: user.LastName, IsAdmin: user.IsAdmin}
-
+	fmt.Printf("rerq %v\n\n", req)
 	rsp, err := client.GenerateJWT(ctx, req)
 	if err != nil {
-		return ""
+		return "", err
 	}
 	//Add token to user tokens
-	return rsp.Token
+	return rsp.Token, nil
 }
