@@ -7,6 +7,7 @@ require (
 	github.com/beorn7/perks v1.0.0 // indirect
 	github.com/bitstored/auth-service v0.0.0-20190521134832-8e7db0d49899
 	github.com/bitstored/crypto-service v0.0.0-20190527122257-6f039d49fb02
+	github.com/bitstored/file-service v0.0.0-20190606123306-2e8d0de90484
 	github.com/cenkalti/backoff v2.1.1+incompatible
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
 	github.com/gogo/protobuf v1.2.1 // indirect
@@ -23,6 +24,7 @@ require (
 	github.com/kr/pty v1.1.4 // indirect
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
+	github.com/opentracing/opentracing-go v1.1.0 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/prometheus/client_golang v0.9.3-0.20190127221311-3c4408c8b829
 	github.com/prometheus/client_model v0.0.0-20190129233127-fd36f4220a90 // indirect
@@ -48,6 +50,7 @@ require (
 	google.golang.org/appengine v1.5.0 // indirect
 	google.golang.org/genproto v0.0.0-20190522204451-c2c4e71fbf69
 	google.golang.org/grpc v1.21.0
+	gopkg.in/couchbase/gocbcore.v7 v7.1.13 // indirect
 	gopkg.in/yaml.v2 v2.2.2 // indirect
 	honnef.co/go/tools v0.0.0-20190418001031-e561f6794a2a // indirect
 )

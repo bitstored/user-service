@@ -199,7 +199,7 @@ func (r *Repository) GetAccount(ctx context.Context, collectionName string, user
 	res := collection.FindOne(ctx, filter)
 
 	user := new(User)
-	res.Decode(&user)
+	res.Decode(user)
 
 	return user
 }

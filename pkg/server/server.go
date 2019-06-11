@@ -3,12 +3,18 @@ package server
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"time"
 
+	file_pb "github.com/bitstored/file-service/pb"
 	"github.com/bitstored/user-service/pb"
 	"github.com/bitstored/user-service/pkg/service"
+)
+
+const (
+	FILE_GRPC_PORT = "localhost:4005"
 )
 
 type Server struct {
@@ -39,6 +45,15 @@ func (s *Server) CreateAccount(ctx context.Context, in *pb.CreateAccountRequest)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	conn, err := grpc.Dial(FILE_GRPC_PORT, grpc.WithInsecure())
+	defer conn.Close()
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, "Unable to create Drive")
+	}
+	client := file_pb.NewFileManagementClient(conn)
+
+	client.CreateDrive(ctx, &file_pb.CreateDriveRequest{UserId: uid})
 	return &pb.CreateAccountResponse{UserId: uid}, nil
 }
 

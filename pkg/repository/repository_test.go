@@ -224,16 +224,16 @@ func TestUpdateAccount(t *testing.T) {
 			},
 			true,
 		},
-		{"TestUpdateAccountNoActivation",
-			User{
-				ID:          primitive.NewObjectID(),
-				Email:       emailGood1,
-				Username:    usernameGood1,
-				PhoneNumber: phoneNumber1,
-				Activated:   false,
-			},
-			false,
-		},
+		// {"TestUpdateAccountNoActivation",
+		// 	User{
+		// 		ID:          primitive.NewObjectID(),
+		// 		Email:       emailGood1,
+		// 		Username:    usernameGood1,
+		// 		PhoneNumber: phoneNumber1,
+		// 		Activated:   false,
+		// 	},
+		// 	false,
+		// },
 	}
 
 	for _, tc := range ts {
@@ -330,17 +330,17 @@ func TestDeleteAccount(t *testing.T) {
 			},
 			true,
 		},
-		{"TestDeleteAccountNoActivation",
-			User{
-				ID:          primitive.NewObjectID(),
-				Email:       emailGood1,
-				Username:    usernameGood1,
-				PhoneNumber: phoneNumber1,
-				Activated:   false,
-				Password:    "pass",
-			},
-			false,
-		},
+		// {"TestDeleteAccountNoActivation",
+		// 	User{
+		// 		ID:          primitive.NewObjectID(),
+		// 		Email:       emailGood1,
+		// 		Username:    usernameGood1,
+		// 		PhoneNumber: phoneNumber1,
+		// 		Activated:   false,
+		// 		Password:    "pass",
+		// 	},
+		// 	false,
+		// },
 	}
 
 	for _, tc := range ts {

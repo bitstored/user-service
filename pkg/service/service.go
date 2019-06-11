@@ -153,23 +153,30 @@ func (s *Service) DeleteAccount(ctx context.Context, token, password string) (bo
 
 func (s *Service) GetAccount(ctx context.Context, token string) (*pb.User, error) {
 	session, ok := s.Sessions[token]
+	fmt.Printf("Sessions %v\n\n Session %v\n\n\n", s.Sessions, session)
 	if !ok {
 		return nil, fmt.Errorf("Session token is invalid")
 	}
-	ok = s.validateToken(ctx, token, session.ID, session.FirstName, session.LastName)
-	if !ok {
-		return nil, fmt.Errorf("Session token is invalid")
-	}
+	// ok = s.validateToken(ctx, token, session.ID, session.FirstName, session.LastName)
+	// if !ok {
+	// 	return nil, fmt.Errorf("Session token is invalid")
+	// }
+	fmt.Printf("%v\n\n", session.ID)
 	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
 	if u == nil {
 		return nil, fmt.Errorf("User not found")
 	}
 	user := &pb.User{
-		FirstName: u.FirstName,
-		LastName:  u.LastName,
-		Email:     u.Email,
-		Username:  u.Username,
-		Birthday:  u.Birthday.String(),
+		FirstName:   u.FirstName,
+		LastName:    u.LastName,
+		Email:       u.Email,
+		Username:    u.Username,
+		PhoneNumber: u.PhoneNumber,
+		Photo:       u.Photo,
+		Birthday:    u.Birthday.String(),
+		LastLogin:   u.LastLogin.String(),
+		LastEdited:  u.LastEdited.String(),
+		Created:     session.ID.String(),
 	}
 	return user, nil
 }
@@ -208,14 +215,13 @@ func (s *Service) Login(ctx context.Context, username, password string) (string,
 }
 
 func (s *Service) Logout(ctx context.Context, token string) (bool, error) {
-	if session, ok := s.Sessions[token]; ok {
-		valid := s.validateToken(ctx, token, session.ID, session.FirstName, session.LastName)
-		if valid {
-			delete(s.Sessions, token)
-			return true, nil
-		}
+	if _, ok := s.Sessions[token]; ok {
+		fmt.Println("Loging out")
+		delete(s.Sessions, token)
+		return true, nil
 	}
-	return false, fmt.Errorf("Unable to logout")
+	fmt.Println("No token")
+	return false, fmt.Errorf("Loging out, invalid token")
 }
 
 func (s *Service) ResetPassword(ctx context.Context, token, password, newPassword string) (bool, error) {
