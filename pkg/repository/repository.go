@@ -135,10 +135,7 @@ func (r *Repository) UpdateAccount(ctx context.Context, collectionName string, u
 	collection := database.Collection(collectionName)
 	filter := bson.D{
 		{ID, userID},
-		{EMAIL, user.Email},
-		{USERNAME, user.Username},
 		{PASSWORD, user.Password},
-		{SALT, user.Salt},
 		{DELETED, false},
 		{ACTIVATED, true},
 		{LOCKED, false},
@@ -147,9 +144,7 @@ func (r *Repository) UpdateAccount(ctx context.Context, collectionName string, u
 		{"$set", bson.D{
 			{FIRSTNAME, user.FirstName},
 			{LASTNAME, user.LastName},
-			{PHONENUMBER, user.PhoneNumber},
 			{PHOTO, user.Photo},
-			{BIRTHDAY, user.Birthday},
 			{LASTEDITED, time.Now()},
 		}},
 	}

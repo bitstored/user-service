@@ -123,9 +123,37 @@ func (s *Service) ActivateAccount(ctx context.Context, token string) error {
 	return fmt.Errorf("Unable to activate account, token not found")
 }
 
-func (s *Service) UpdateAccount(ctx context.Context) (error, error) {
-
-	return nil, nil
+func (s *Service) UpdateAccount(ctx context.Context, token, password, firstname, lastname string, photo []byte) error {
+	session, ok := s.Sessions[token]
+	fmt.Printf("Sessions %v\n\n Session %v\n\n\n", s.Sessions, session)
+	if !ok {
+		return fmt.Errorf("Session token is invalid")
+	}
+	// ok = s.validateToken(ctx, token, session.ID, session.FirstName, session.LastName)
+	// if !ok {
+	// 	return nil, fmt.Errorf("Session token is invalid")
+	// }
+	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
+	if u == nil {
+		return fmt.Errorf("Session token is invalid")
+	}
+	salt := u.Salt
+	password, err := encryptPassword(password, salt)
+	if err != nil {
+		return err
+	}
+	user := repository.User{
+		ID:        session.ID,
+		FirstName: firstname,
+		LastName:  lastname,
+		Password:  password,
+		Photo:     photo,
+	}
+	res, err := s.Repo.UpdateAccount(ctx, USER_COLLECTION_NAME, session.ID, user)
+	if res.MatchedCount == 0 {
+		return fmt.Errorf("Unable to update user")
+	}
+	return err
 }
 
 func (s *Service) DeleteAccount(ctx context.Context, token, password string) (bool, error) {
