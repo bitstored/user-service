@@ -43,7 +43,7 @@ func NewService(repo *repository.Repository) *Service {
 	}
 }
 
-func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay time.Time, email, uname, pass, pNumber string, photo []byte) (string, error) {
+func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay time.Time, email, uname, pass, pNumber string, photo string) (string, error) {
 
 	_, err1 := validator.Password(pass)
 	if err1 != nil {
@@ -123,7 +123,7 @@ func (s *Service) ActivateAccount(ctx context.Context, token string) error {
 	return fmt.Errorf("Unable to activate account, token not found")
 }
 
-func (s *Service) UpdateAccount(ctx context.Context, token, password, firstname, lastname string, photo []byte) error {
+func (s *Service) UpdateAccount(ctx context.Context, token, password, firstname, lastname string, photo string) error {
 	session, ok := s.Sessions[token]
 	fmt.Printf("Sessions %v\n\n Session %v\n\n\n", s.Sessions, session)
 	if !ok {

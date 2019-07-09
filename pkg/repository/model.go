@@ -14,7 +14,7 @@ type User struct {
 	Username    string             `bson:"Username"`
 	Password    string             `bson:"Password"`
 	PhoneNumber string             `bson:"PhoneNumber"`
-	Photo       []byte             `bson:"Photo"`
+	Photo       string             `bson:"Photo"`
 	AvailableMb uint32             `bson:"AvailableMb"`
 	CreatedAt   time.Time          `bson:"CreatedAt"`
 	LastLogin   time.Time          `bson:"LastLogin"`

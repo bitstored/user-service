@@ -70,7 +70,10 @@ func request_Account_ActivateAccount_0(ctx context.Context, marshaler runtime.Ma
 	var protoReq ActivateAccountRequest
 	var metadata runtime.ServerMetadata
 
-	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_Account_ActivateAccount_0); err != nil {
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Account_ActivateAccount_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -104,7 +107,10 @@ func request_Account_DeleteAccount_0(ctx context.Context, marshaler runtime.Mars
 	var protoReq DeleteAccountRequest
 	var metadata runtime.ServerMetadata
 
-	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_Account_DeleteAccount_0); err != nil {
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Account_DeleteAccount_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -121,7 +127,10 @@ func request_Account_GetAccount_0(ctx context.Context, marshaler runtime.Marshal
 	var protoReq GetAccountRequest
 	var metadata runtime.ServerMetadata
 
-	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_Account_GetAccount_0); err != nil {
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Account_GetAccount_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -155,7 +164,10 @@ func request_Account_Logout_0(ctx context.Context, marshaler runtime.Marshaler, 
 	var protoReq LogoutRequest
 	var metadata runtime.ServerMetadata
 
-	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_Account_Logout_0); err != nil {
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Account_Logout_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -551,31 +563,31 @@ func RegisterAccountHandlerClient(ctx context.Context, mux *runtime.ServeMux, cl
 }
 
 var (
-	pattern_Account_CreateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "create"}, ""))
+	pattern_Account_CreateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "create"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_ResendActivationMail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "resend"}, ""))
+	pattern_Account_ResendActivationMail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "resend"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_ActivateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "activate"}, ""))
+	pattern_Account_ActivateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "activate"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_UpdateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "update"}, ""))
+	pattern_Account_UpdateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "update"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_DeleteAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "delete"}, ""))
+	pattern_Account_DeleteAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "delete"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_GetAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "get"}, ""))
+	pattern_Account_GetAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "get"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_Login_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"user", "api", "v1", "login"}, ""))
+	pattern_Account_Login_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"user", "api", "v1", "login"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_Logout_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"user", "api", "v1", "logout"}, ""))
+	pattern_Account_Logout_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"user", "api", "v1", "logout"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_ResetPassword_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "password", "reset"}, ""))
+	pattern_Account_ResetPassword_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "password", "reset"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_LockAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "lock"}, ""))
+	pattern_Account_LockAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "lock"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_RequestUnlockAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"user", "api", "v1", "account", "unlock", "request"}, ""))
+	pattern_Account_RequestUnlockAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"user", "api", "v1", "account", "unlock", "request"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_UnlockAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "unlock"}, ""))
+	pattern_Account_UnlockAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "unlock"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Account_ListUsers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "list"}, ""))
+	pattern_Account_ListUsers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"user", "api", "v1", "account", "list"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (

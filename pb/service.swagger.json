@@ -547,8 +547,7 @@
           "type": "string"
         },
         "photo": {
-          "type": "string",
-          "format": "byte"
+          "type": "string"
         },
         "available_mb": {
           "type": "integer",

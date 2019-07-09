@@ -90,7 +90,7 @@ message User {
     string username = 5;
     string password = 6;
     string phone_number = 7;
-    bytes photo = 8;
+    string photo = 8;
     uint32 available_mb = 9;
     bool is_admin = 10;
     bool is_locked = 11;
