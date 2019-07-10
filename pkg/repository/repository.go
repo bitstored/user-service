@@ -68,16 +68,21 @@ func (r *Repository) CreateAccount(ctx context.Context, collectionName string, u
 	if !r.dataExists(ctx, collection, EMAIL, user.Email) {
 		err := fmt.Errorf("account can't be created, %s = %s is already in use", EMAIL, user.Email)
 		LogEvent(EVENT_TYPE_INSERT, STATUS_ERROR, err, user)
+		r.Lock.RUnlock()
 		return nil, err
 	}
 	if !r.dataExists(ctx, collection, USERNAME, user.Username) {
 		err := fmt.Errorf("account can't be created, %s = %s is already in use", USERNAME, user.Username)
 		LogEvent(EVENT_TYPE_INSERT, STATUS_ERROR, err, user)
+		r.Lock.RUnlock()
+
 		return nil, err
 	}
 	if !r.dataExists(ctx, collection, PHONENUMBER, user.PhoneNumber) {
 		err := fmt.Errorf("account can't be created, %s = %s is already in use", PHONENUMBER, user.PhoneNumber)
 		LogEvent(EVENT_TYPE_INSERT, STATUS_ERROR, err, user)
+		r.Lock.RUnlock()
+
 		return nil, err
 	}
 	r.Lock.RUnlock()
@@ -166,7 +171,7 @@ func (r *Repository) DeleteAccount(ctx context.Context, collectionName string, u
 		{DELETED, false},
 		{ACTIVATED, true},
 		{LOCKED, false},
-		{PASSWORD, password},
+		// {PASSWORD, password},
 	}
 	update := bson.D{
 		{"$set", bson.D{

@@ -77,6 +77,8 @@ func (s *Server) ActivateAccount(ctx context.Context, in *pb.ActivateAccountRequ
 }
 
 func (s *Server) UpdateAccount(ctx context.Context, in *pb.UpdateAccountRequest) (*pb.UpdateAccountResponse, error) {
+	fmt.Println("Updating... ")
+
 	err := s.Service.UpdateAccount(ctx, in.GetCreationDate(), in.GetUser().GetPassword(), in.GetUser().GetFirstName(), in.GetUser().GetLastName(), in.GetUser().GetPhoto())
 	if err != nil {
 		return nil, status.Error(codes.Internal, "Unable to update user")
@@ -85,7 +87,11 @@ func (s *Server) UpdateAccount(ctx context.Context, in *pb.UpdateAccountRequest)
 }
 
 func (s *Server) DeleteAccount(ctx context.Context, in *pb.DeleteAccountRequest) (*pb.DeleteAccountResponse, error) {
-	return nil, nil
+	_, err := s.Service.DeleteAccount(ctx, in.GetSessionToken())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.DeleteAccountResponse{}, nil
 }
 
 func (s *Server) GetAccount(ctx context.Context, in *pb.GetAccountRequest) (*pb.GetAccountResponse, error) {

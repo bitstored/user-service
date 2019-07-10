@@ -61,6 +61,7 @@ func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay t
 	if err != nil {
 		return "", err
 	}
+	fmt.Println("Making user object")
 	user := repository.User{
 		ID:          primitive.NewObjectID(),
 		FirstName:   fName,
@@ -74,7 +75,10 @@ func (s *Service) CreateAccount(ctx context.Context, fName, lName string, bDay t
 		Photo:       photo,
 	}
 
+	fmt.Println("Making user in repo")
+
 	res, err := s.Repo.CreateAccount(ctx, USER_COLLECTION_NAME, user)
+	fmt.Println("Made user in repo")
 
 	if err != nil {
 		return "", err
@@ -156,23 +160,23 @@ func (s *Service) UpdateAccount(ctx context.Context, token, password, firstname,
 	return err
 }
 
-func (s *Service) DeleteAccount(ctx context.Context, token, password string) (bool, error) {
+func (s *Service) DeleteAccount(ctx context.Context, token string) (bool, error) {
 	session, ok := s.Sessions[token]
 	if !ok {
 		return false, fmt.Errorf("Session token is invalid")
 	}
 	uid := session.ID
 
-	u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
-	if u == nil {
-		return false, fmt.Errorf("Session token is invalid")
-	}
-	salt := u.Salt
-	password, err := encryptPassword(password, salt)
-	if err != nil {
-		return false, err
-	}
-	res, err := s.Repo.DeleteAccount(ctx, USER_COLLECTION_NAME, uid, password)
+	// u := s.Repo.GetAccount(ctx, USER_COLLECTION_NAME, session.ID)
+	// if u == nil {
+	// 	return false, fmt.Errorf("Session token is invalid")
+	// }
+	// salt := u.Salt
+	// password, err := encryptPassword(password, salt)
+	// if err != nil {
+	// 	return false, err
+	// }
+	res, err := s.Repo.DeleteAccount(ctx, USER_COLLECTION_NAME, uid, " ")
 	if err != nil || res.ModifiedCount == 0 {
 		return false, err
 	}
