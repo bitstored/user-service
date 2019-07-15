@@ -155,7 +155,7 @@ func (r *Repository) UpdateAccount(ctx context.Context, collectionName string, u
 	}
 	res, err := collection.UpdateOne(ctx, filter, update)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 	if res.ModifiedCount == 0 {
 		return nil, fmt.Errorf("user not found, account may be locked, deleted or not activated")
